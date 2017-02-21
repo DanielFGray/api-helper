@@ -1,4 +1,4 @@
-# api-explorer
+# api-helper
 
 `usage: api <profile> <action> <endpoint> [...data]`
 

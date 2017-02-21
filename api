@@ -10,7 +10,7 @@ declare server
 declare -a headers
 declare -a args
 
-declare -r config_dir="${XDG_CONFIG_DIR:-$HOME/.config}/api-explorer"
+declare -r config_dir="${XDG_CONFIG_DIR:-$HOME/.config}/api-helper"
 declare -A colors
 colors[red]=$(tput setaf 1)
 colors[green]=$(tput setaf 2)
