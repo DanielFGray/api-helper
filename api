@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+usage() {
+  echo 'usage: api <profile> <action> <endpoint> [...data]'
+}
+
+declare action
+declare server
+declare -a headers
+declare -a args
+
+declare -r config_dir="${XDG_CONFIG_DIR:-$HOME/.config}/api-explorer"
+declare -A colors
+colors[red]=$(tput setaf 1)
+colors[green]=$(tput setaf 2)
+colors[blue]=$(tput setaf 4)
+colors[reset]=$(tput sgr0)
+
+color() {
+  local color="$1"; shift
+  printf '%s' "${colors[$color]}"
+  printf '%s\n' "$@"
+  printf '%s' "${colors[reset]}"
+}
+
+err() { color red "$@" >&2; return 1; }
+
+die() {
+  (( $# > 0 )) && err "$@"
+  exit 1
+}
+
+has() {
+  local v=0
+  if [[ $1 = '-v' ]]; then
+    v=1
+    shift
+  fi
+  for c; do c="${c%% *}"
+    if ! command -v "$c" &> /dev/null; then
+      (( v > 0 )) && err "$c not found"
+      return 1
+    fi
+  done
+}
+
+parse_config_file() {
+  local line key val nr=0
+  config_err=()
+  while IFS= read -r line; do
+    (( ++nr ))
+    [[ -z "$line" || "$line" = '#'* ]] && continue
+    space=${line%%[![:space:]]*}
+    line=${line#"$space"}
+    key=${line%% *}
+    line=${line#"$key"}
+    space=${line%%[![:space:]]*}
+    val=${line#"$space"}
+    if [[ -z "$val" ]]; then
+      config_err+=( "  missing value for \"$key\" in config file on line $nr" )
+      continue
+    fi
+    case "$key" in
+      header) headers+=( "$val" ) ;;
+      server) server="$val" ;;
+      *) config_err+=( "  unknown key \"$key\" in config file on line $nr" )
+    esac
+  done
+  if (( ${#config_err[@]} > 0 )); then
+    err 'there were errors parsing config file:' "${config_err[@]}"
+  fi
+}
+
+has -v curl || die
+
+case "$1" in
+  -h|--help) usage; exit ;;
+esac
+
+if [[ -s "${config_dir}/$1" ]]; then
+  config_file="${config_dir}/$1"
+  parse_config_file < "${config_file}"
+  shift
+else
+  die "no config file found for $1"
+fi
+
+case "${1,,}" in
+  get|post|put|delete) action="${1^^}"; shift ;;
+  *) exit "$1 is not a valid action" ' action must be GET PUT POST or DELETE'
+esac
+
+args+=( --request "$action" )
+for h in "${headers[@]}"; do
+  args+=( --header "$h" )
+done
+
+endpoint="${server/%\/}/${1#\/}"
+shift
+
+for a; do
+  args+=( --data-urlencode "$a" )
+done
+
+curl "${args[@]}" "$endpoint"
