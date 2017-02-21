@@ -1,6 +1,14 @@
 # api-helper
 
-`usage: api <profile> <action> <endpoint> [...data]`
+## Dependencies
+
+* [curl](https://github.com/curl/curl)
+
+## Usage
+
+```
+usage: api <profile> <action> <endpoint> [...data]
+```
 
 ---
 
