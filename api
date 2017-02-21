@@ -63,10 +63,7 @@ parse_config_file() {
     fi
     case "$key" in
       server) server="$val" ;;
-      header) args+=( --header "$val" ) ;;
-      user) args+=( --user "$val" ) ;;
-      data) args+=( --data "$val" ) ;;
-      *) config_err+=( "  unknown key \"$key\" in config file on line $nr" )
+      *) args+=( "--$key" "$val" ) ;;
     esac
   done
   if (( ${#config_err[@]} > 0 )); then
