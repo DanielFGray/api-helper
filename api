@@ -4,6 +4,7 @@ usage() {
   echo 'usage: api <profile> <action> <endpoint> [...data]'
 }
 
+declare profile
 declare action
 declare server
 declare -a headers
@@ -77,13 +78,15 @@ case "$1" in
   -h|--help) usage; exit ;;
 esac
 
-if [[ -s "${config_dir}/$1" ]]; then
-  config_file="${config_dir}/$1"
-  parse_config_file < "${config_file}"
+profile="$1"
+if [[ -s "${config_dir}/$profile" ]]; then
+  parse_config_file < "${config_dir}/$profile"
   shift
 else
-  die "no config file found for $1"
+  die "no config file found for $profile"
 fi
+
+[[ -z "$server" ]] && "server is not defined for $profile"
 
 case "${1,,}" in
   get|post|put|delete) action="${1^^}"; shift ;;
