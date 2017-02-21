@@ -62,8 +62,9 @@ parse_config_file() {
       continue
     fi
     case "$key" in
-      header) headers+=( "$val" ) ;;
       server) server="$val" ;;
+      header) args+=( --header "$val" ) ;;
+      user) args+=( --user "$val" ) ;;
       *) config_err+=( "  unknown key \"$key\" in config file on line $nr" )
     esac
   done
@@ -89,16 +90,11 @@ fi
 [[ -z "$server" ]] && "server is not defined for $profile"
 
 case "${1,,}" in
-  get|post|put|delete) action="${1^^}"; shift ;;
-  *) exit "$1 is not a valid action" ' action must be GET PUT POST or DELETE'
+  get|post|put|delete) args+=( --request "${1^^}" ); shift ;;
+  *) die "$1 is not a valid action" ' action must be GET PUT POST or DELETE'
 esac
-
-args+=( --request "$action" )
-for h in "${headers[@]}"; do
-  args+=( --header "$h" )
-done
 
 endpoint="${server/%\/}/${1#\/}"
 shift
 
-curl "${args[@]}" "$@" "$endpoint"
+curl -L "${args[@]}" "$@" "$endpoint"
