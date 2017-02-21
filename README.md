@@ -12,7 +12,7 @@ usage: api <profile> <action> <endpoint> [...data]
 
 ---
 
-`<profile>` is the name of a file in ~/.config/api-explorer
+`<profile>` is the name of a file in `~/.config/api-helper`
 
 At minimum it should contain a server entry:
 
