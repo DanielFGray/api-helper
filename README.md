@@ -43,16 +43,36 @@ api github get user
 which is equivalent to
 
 ````
-curl --request GET --header Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4 https://api.github.com/user
+curl -X GET -H 'Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4' https://api.github.com/user
 ````
 
-The remainder of arguments are passed directly to curl, so to pass data to the API, you use the normal `curl` options. Creating a repo on GitHub is now as simple as:
+The remainder of arguments are passed directly to curl, so to pass data to the [API](https://developer.github.com/api/), you use the normal `curl` options. Creating a repo on GitHub is now as simple as:
 
 ```
-api github post user/repos -d '{ "name": "api-explorer", "auto_init": false }'
+api github post user/repos -d '{"name":"awesome_new_repo"}'
 ```
 
-If the API you're using prefers HTTP auth you can specify a user in the config file:
+---
+
+For GitLab, the process is very similar. Create a file at `~/.config/api-helper/gitlab` and put a server in there:
+
+```
+server  https://gitlab.com/api/v3/
+```
+
+The auth for GitLab is only a tiny bit different:
+
+```
+header PRIVATE-TOKEN: 9koXpg98eAheJpvBs5tK
+```
+
+You can find your private token on your [account page](https://gitlab.com/profile/account).
+
+You can specify multiple `header` entries if you need.
+
+---
+
+If the API you're using prefers HTTP auth you can specify a user in the config file: 
 
 ```
 server https://api.teknik.io/v1
