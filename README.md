@@ -43,3 +43,10 @@ The remainder of arguments are passed directly to curl, so to pass data to the A
 ```
 api github post user/repos -d '{ "name": "api-explorer", "auto_init": false }'
 ```
+
+If the API you're using prefers HTTP auth you can specify a user in the config file:
+
+```
+server https://api.teknik.io/v1
+user   user:password
+```
