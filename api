@@ -98,8 +98,4 @@ done
 endpoint="${server/%\/}/${1#\/}"
 shift
 
-for a; do
-  args+=( --data-urlencode "$a" )
-done
-
-curl "${args[@]}" "$endpoint"
+curl "${args[@]}" "$@" "$endpoint"

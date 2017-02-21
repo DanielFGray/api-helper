@@ -23,3 +23,10 @@ so in the config file you would add
 You can now query the API a lot simpler:
 
 `api github get user`
+
+which is equivalent to
+`curl --request GET --header Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4 https://api.github.com/user`
+
+The remainder of arguments are passed directly to curl, so to pass data to the API, you use the normal `curl` options. Creating a repo on GitHub is now as simple as:
+
+`api github post user/repos -d '{ "name": "api-explorer", "auto_init": false }'`
