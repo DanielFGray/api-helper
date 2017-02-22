@@ -51,10 +51,10 @@ You can now query the API a lot simpler:
 api github get user
 ```
 
-which is equivalent to
+which will execute
 
 ````
-curl -X GET -H 'Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4' https://api.github.com/user
+curl --request GET --header 'Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4' https://api.github.com/user
 ````
 
 The remainder of arguments are passed directly to curl, so to pass data to the [API](https://developer.github.com/api/), you use the normal `curl` options. Creating a repo on GitHub is now as simple as:
