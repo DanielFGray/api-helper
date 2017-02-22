@@ -5,7 +5,7 @@ usage() {
 }
 
 declare profile
-declare server
+declare url
 declare -a args
 
 declare -r config_dir="${XDG_CONFIG_DIR:-$HOME/.config}/api-helper"
@@ -60,7 +60,7 @@ parse_config_file() {
       continue
     fi
     case "$key" in
-      server) server="$val" ;;
+      url) url="$val" ;;
       *) args+=( "--$key" "$val" ) ;;
     esac
   done
@@ -88,13 +88,13 @@ else
   die "could not find or open ${config_dir}/$profile"
 fi
 
-if [[ -z "$server" ]]; then
-  die "server is not defined for $profile"
+if [[ -z "$url" ]]; then
+  die "url is not defined for $profile"
 fi
 
 args+=( --request "${2^^}" )
 
-endpoint="${server/%\/}/${3#\/}"
+endpoint="${url/%\/}/${3#\/}"
 
 shift 3
 

@@ -16,19 +16,19 @@
 usage: api <profile> <action> <endpoint> [...data]
 ```
 
-* `profile` is the name of a file in `~/.config/api-helper` containing a server URL and arbitrary curl options
+* `profile` is the name of a file in `~/.config/api-helper` containing a URL entry and arbitrary curl options
 * `action` is an http verb like `get`, `put`, `post`, etc
-* `endpoint` is a route to be appended to the `server` defined in the `profile`
+* `endpoint` is a route to be appended to the `url` defined in the `profile`
 * `data` are curl options like `--data`  to be sent with the request
 
 ## Quick tutorial
 
-At minimum your profile should contain a server entry:
+At minimum your profile should contain a URL entry:
 
 ```
 ~/.config/api-helper/github
 
-server		https://api.github.com
+url		https://api.github.com
 ```
 
 You'll likely also want to add authentication.
@@ -57,7 +57,8 @@ Which will execute
 curl --request GET --header 'Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4' https://api.github.com/user
 ````
 
-The remainder of arguments are passed directly to curl, so to pass data to the [API](https://developer.github.com/api/), you use the normal `curl` options. Creating a repo on GitHub is now as simple as:
+The remainder of arguments are passed directly to curl, so to pass data to the [API](https://developer.github.com/api/), you use the normal `curl` options.  
+Creating a repo on GitHub is now as simple as:
 
 ```
 api github post user/repos -d '{"name":"awesome_new_repo"}'
@@ -65,10 +66,10 @@ api github post user/repos -d '{"name":"awesome_new_repo"}'
 
 ---
 
-For [GitLab](https://docs.gitlab.com/ce/api/README.html), the process is similar. Create a file at `~/.config/api-helper/gitlab` and put a server in there:
+For [GitLab](https://docs.gitlab.com/ce/api/README.html), the process is similar. Create a file at `~/.config/api-helper/gitlab` and put a url in there:
 
 ```
-server  https://gitlab.com/api/v3/
+url  https://gitlab.com/api/v3/
 ```
 
 The [auth for GitLab](https://docs.gitlab.com/ce/api/README.html#authentication) is only slightly different:
@@ -86,14 +87,14 @@ You can of course specify multiple `header` entries, if you want to add `sudo` f
 If the API you're using prefers HTTP auth you can specify a user in the config file: 
 
 ```
-server  https://api.teknik.io/v1
-user    user:password
+url   https://api.teknik.io/v1
+user  user:password
 ```
 
 Or if the API prefers it as a plain data key:
 
 ```
-server  http://ws.audioscrobbler.com/2.0/
-data    api_key=dfd71eb15d3d76069d85617de769872a
-data    format=json
+url   http://ws.audioscrobbler.com/2.0/
+data  api_key=dfd71eb15d3d76069d85617de769872a
+data  format=json
 ```
