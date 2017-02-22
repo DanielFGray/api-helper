@@ -16,7 +16,7 @@
 usage: api <profile> <action> <endpoint> [...data]
 ```
 
-* `profile` is the name of a file in `~/.config/api-helper` containing a server URL and arbitrary curl commands
+* `profile` is the name of a file in `~/.config/api-helper` containing a server URL and arbitrary curl options
 * `action` is an http verb like `get`, `put`, `post`, etc
 * `endpoint` is a route to be appended to the `server` defined in the `profile`
 * `data` are optional curl options like `--data`  to be sent with the request
