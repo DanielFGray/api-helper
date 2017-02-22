@@ -19,14 +19,14 @@ usage: api <profile> <action> <endpoint> [...data]
 * `profile` is the name of a file in `~/.config/api-helper` containing a server URL and arbitrary curl options
 * `action` is an http verb like `get`, `put`, `post`, etc
 * `endpoint` is a route to be appended to the `server` defined in the `profile`
-* `data` are optional curl options like `--data`  to be sent with the request
+* `data` are curl options like `--data`  to be sent with the request
 
 ## Quick tutorial
 
 At minimum your profile should contain a server entry:
 
 ```
-# ~/.config/api-helper/github
+~/.config/api-helper/github
 
 server		https://api.github.com
 ```
@@ -89,3 +89,9 @@ If the API you're using prefers HTTP auth you can specify a user in the config f
 server https://api.teknik.io/v1
 user   user:password
 ```
+
+Or if the API prefers it as a plain data key
+
+server http://ws.audioscrobbler.com/2.0/
+data   api_key=dfd71eb15d3d76069d85617de769872a
+data   format=json
