@@ -5,9 +5,7 @@ usage() {
 }
 
 declare profile
-declare action
 declare server
-declare -a headers
 declare -a args
 
 declare -r config_dir="${XDG_CONFIG_DIR:-$HOME/.config}/api-helper"
@@ -77,22 +75,27 @@ case "$1" in
   -h|--help) usage; exit ;;
 esac
 
-profile="$1"
-if [[ -s "${config_dir}/$profile" ]]; then
-  parse_config_file < "${config_dir}/$profile"
-  shift
-else
-  die "no config file found for $profile"
+if (( $# < 3 )); then
+  err 'Not enough options specified'
+  usage
+  die
 fi
 
-[[ -z "$server" ]] && "server is not defined for $profile"
+profile="$1"
+if [[ -r "${config_dir}/$profile" ]]; then
+  parse_config_file < "${config_dir}/$profile"
+else
+  die "could not find or open ${config_dir}/$profile"
+fi
 
-case "${1,,}" in
-  get|post|put|delete) args+=( --request "${1^^}" ); shift ;;
-  *) die "$1 is not a valid action" ' action must be GET PUT POST or DELETE'
-esac
+if [[ -z "$server" ]]; then
+  die "server is not defined for $profile"
+fi
 
-endpoint="${server/%\/}/${1#\/}"
-shift
+args+=( --request "${2^^}" )
 
-curl -L "${args[@]}" "$@" "$endpoint"
+endpoint="${server/%\/}/${3#\/}"
+
+shift 3
+
+curl -sL "${args[@]}" "$@" "$endpoint"
