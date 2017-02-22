@@ -2,7 +2,13 @@
 
 ## Dependencies
 
-* [curl](https://github.com/curl/curl)
+* [curl](https://curl.haxx.se)
+
+## Why
+
+* Many API tasks require sending the same headers or data with every request
+* Typing (or digging through your shell history for) the same options is tedious
+* You want to be able to save API requests (to your shell rc for example) without leaking your auth tokens everywhere
 
 ## Usage
 
@@ -10,13 +16,18 @@
 usage: api <profile> <action> <endpoint> [...data]
 ```
 
----
+* `profile` is the name of a file in `~/.config/api-helper` containing a server URL
+* `action` is an http verb like `get`, `put`, `post`, etc
+* `endpoint` is a route to be appended to the `server` defined in the `profile`
+* `data` are optional curl options like `--data`  to be sent with the request
 
-`<profile>` is the name of a file in `~/.config/api-helper`
+## Quick tutorial
 
-At minimum it should contain a server entry:
+At minimum your profile should contain a server entry:
 
 ```
+# ~/.config/api-helper/github
+
 server		https://api.github.com
 ```
 
