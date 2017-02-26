@@ -9,6 +9,7 @@
 * Many API tasks require sending the same headers or data with every request
 * Typing (or digging through your shell history for) the same options is tedious
 * You want to be able to save API requests (to your shell rc for example) without leaking your auth tokens everywhere
+* Using `curl --config` is clunky
 
 ## Usage
 
@@ -57,16 +58,24 @@ Which will execute
 curl --request GET --header 'Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4' https://api.github.com/user
 ````
 
-The remainder of arguments are passed directly to curl, so to pass data to the [API](https://developer.github.com/api/), you use the normal `curl` options.  
+Everything after the first 3 arguments is passed directly to curl, so to pass data to the [API](https://developer.github.com/api/), you use curl's built-in methods.  
 Creating a repo on GitHub is now as simple as:
 
 ```
 api github post user/repos -d '{"name":"awesome_new_repo"}'
 ```
 
+Or, with some fancy [`jq`](https://stedolan.github.io/jq/) magic:
+
+```
+api github post user/repos --json '.name="awesome_new_repo"'
+```
+
+`--json` is the only non-standard option currently provided, it's short-hand for `--data "$(jq -Mcn '…')"`
+
 ---
 
-For [GitLab](https://docs.gitlab.com/ce/api/README.html), the process is similar. Create a file at `~/.config/api-helper/gitlab` and put a url in there:
+For [GitLab](https://docs.gitlab.com/ce/api/README.html), the process is similar. Create a file at `~/.config/api-helper/gitlab` and put a `url` in there:
 
 ```
 url  https://gitlab.com/api/v3/
