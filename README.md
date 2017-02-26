@@ -27,6 +27,8 @@ There are three levels of verbosity:
 * `-vv` will show the curl transfer status (by disabling `--silent`)
 * `-vvv` will call curl with `--verbose`
 
+Verbosity most be specified as the first argument.
+
 ## Quick tutorial
 
 At minimum your profile should contain a URL entry:
