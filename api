@@ -7,6 +7,7 @@ usage() {
 declare profile
 declare url
 declare -a args
+declare verbose=1
 
 declare -r config_dir="${XDG_CONFIG_DIR:-$HOME/.config}/api-helper"
 declare -A colors
@@ -55,6 +56,7 @@ parse_config_file() {
     line=${line#"$key"}
     space=${line%%[![:space:]]*}
     val=${line#"$space"}
+    [[ $key = '"'*'"' ]] && key=${key/#\"} key=${key/%\"}
     if [[ -z "$val" ]]; then
       config_err+=( "  missing value for \"$key\" in config file on line $nr" )
       continue
@@ -72,14 +74,16 @@ parse_config_file() {
 has -v curl || die
 
 case "$1" in
-  -h|--help) usage; exit ;;
+  -h|--help)
+    usage
+    exit
+    ;;
+  -v|--verbose) verbose=1; shift ;;
+  -vv) verbose=2; shift ;;
+  -vvv) verbose=3; shift ;;
 esac
 
-if (( $# < 3 )); then
-  err 'Not enough options specified'
-  usage
-  die
-fi
+[[ -z "$1" ]] && die 'please specify a profile'
 
 profile="$1"
 if [[ -r "${config_dir}/$profile" ]]; then
@@ -92,10 +96,43 @@ if [[ -z "$url" ]]; then
   die "url is not defined for $profile"
 fi
 
+if (( $# < 3 )); then
+  err 'Not enough options specified'
+  usage
+  die
+fi
+
 args+=( --request "${2^^}" )
 
-endpoint="${url/%\/}/${3#\/}"
+printf -v endpoint '%s/%s' "${url/%\/}" "${3#\/}"
 
 shift 3
 
-curl -sL "${args[@]}" "$@" "$endpoint"
+while true; do
+  case "$1" in
+    --json)
+      has jq || die 'jq must be installed for --json'
+      args+=( -d "$(jq -Mcn "$2")" )
+      shift
+      ;;
+    *) args+=( "$1" )
+  esac
+  shift || break
+done
+
+case "$verbose" in
+  0|1) args+=( -s ) ;;
+  2) args+=( ) ;;
+  *) args+=( -v ) ;;
+esac
+
+cmd=( curl "${args[@]}" "$endpoint" )
+
+((verbose > 0 )) && echo "${cmd[*]}" >&2
+response=$( "${cmd[@]}" )
+
+if has jq && [[ -t 1 ]]; then
+  jq -C '.' <<< "$response" 2> /dev/null || echo "$response"
+else
+  echo "$response"
+fi
