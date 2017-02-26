@@ -2,7 +2,8 @@
 
 ## Dependencies
 
-* [curl](https://curl.haxx.se)
+* [curl](https://curl.haxx.se) for sending data
+* [`jq`](https://stedolan.github.io/jq/) *[optional]* for pretty-printing output and `--json` support (explained below)
 
 ## Why
 
