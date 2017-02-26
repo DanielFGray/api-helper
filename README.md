@@ -115,3 +115,7 @@ url   http://ws.audioscrobbler.com/2.0/
 data  api_key=dfd71eb15d3d76069d85617de769872a
 data  format=json
 ```
+
+## Caveats
+
+In order to achieve pretty printing of JSON responses this buffers the output of curl. If your API returns a stream rather than a generic strings this will break it. I imagine for 99% of use-cases this won't have any effect, but if it does, please file an issue.
