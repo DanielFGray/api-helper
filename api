@@ -112,7 +112,7 @@ while true; do
   case "$1" in
     --json)
       has jq || die 'jq must be installed for --json'
-      args+=( -d "$(jq -Mcn "$2")" )
+      args+=( --data "$(jq -Mcn "$2")" )
       shift
       ;;
     *) args+=( "$1" )
@@ -129,10 +129,4 @@ esac
 cmd=( curl "${args[@]}" "$endpoint" )
 
 ((verbose > 0 )) && echo "${cmd[*]}" >&2
-response=$( "${cmd[@]}" )
-
-if has jq && [[ -t 1 ]]; then
-  jq -C '.' <<< "$response" 2> /dev/null || echo "$response"
-else
-  echo "$response"
-fi
+"${cmd[@]}"
