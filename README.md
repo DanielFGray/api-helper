@@ -14,13 +14,18 @@
 ## Usage
 
 ```
-usage: api <profile> <action> <endpoint> [...data]
+usage: api [-vh] <profile> <action> <endpoint> [...data]
 ```
 
 * `profile` is the name of a file in `~/.config/api-helper` containing a URL entry and arbitrary curl options
 * `action` is an http verb like `get`, `put`, `post`, etc
 * `endpoint` is a route to be appended to the `url` defined in the `profile`
 * `data` are curl options like `--data`  to be sent with the request
+
+There are three levels of verbosity:
+* `-v` will print the curl command to stderr
+* `-vv` will show the curl transfer status (by disabling `--silent`)
+* `-vvv` will call curl with `--verbose`
 
 ## Quick tutorial
 
