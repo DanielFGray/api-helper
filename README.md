@@ -86,7 +86,7 @@ api github post user/repos --json '.name="awesome_new_repo"'
 For [GitLab](https://docs.gitlab.com/ce/api/README.html), the process is similar. Create a file at `~/.config/api-helper/gitlab` and put a `url` in there:
 
 ```
-url  https://gitlab.com/api/v3/
+url  https://gitlab.com/api/v4/
 ```
 
 The [auth for GitLab](https://docs.gitlab.com/ce/api/README.html#authentication) is only slightly different:
@@ -95,7 +95,7 @@ The [auth for GitLab](https://docs.gitlab.com/ce/api/README.html#authentication)
 header  PRIVATE-TOKEN: 9koXpg98eAheJpvBs5tK
 ```
 
-You can find your GitLab private token on your [account page](https://gitlab.com/profile/account).
+You should create [personal access token](https://gitlab.com/profile/personal_access_tokens) on Gitlab specifically for this this use, rather than using your private token.
 
 You can of course specify multiple `header` entries, if you want to add `sudo` for example.
 
