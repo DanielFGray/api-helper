@@ -115,3 +115,7 @@ url   http://ws.audioscrobbler.com/2.0/
 data  api_key=dfd71eb15d3d76069d85617de769872a
 data  format=json
 ```
+
+# See also
+
+* [with](https://github.com/mchav/with) - pseudo-repl mode: `with api github`
