@@ -42,7 +42,7 @@ url		https://api.github.com
 
 You'll likely also want to add authentication.
 
-The [GitHub API](https://developer.github.com/guides/getting-started/) specifies you should provide your [access key](https://github.com/settings/tokens) as a header in the following form:
+The [GitHub API](https://developer.github.com/guides/getting-started/) specifies you should provide an [access key](https://github.com/settings/tokens) as a header in the following form:
 
 ```
 Authorization: token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4
