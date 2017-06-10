@@ -7,7 +7,7 @@ usage() {
 declare profile
 declare url
 declare -a args
-declare verbose=1
+declare verbose=0
 
 declare -r config_dir="${XDG_CONFIG_DIR:-$HOME/.config}/api-helper"
 declare -A colors
