@@ -116,6 +116,25 @@ data  api_key=dfd71eb15d3d76069d85617de769872a
 data  format=json
 ```
 
-# See also
+## shell integration
 
-* [with](https://github.com/mchav/with) - pseudo-repl mode: `with api github`
+A small shell function can be added to your `bashrc` that will allow you to access the response as the variable `$res` in your shell:
+
+``` bash
+api() {
+  local output
+  res=$(command api "$@")
+  if output=$(jq -C '.' <<< "$res"); then
+    echo "$output"
+  else
+    echo "$res"
+  fi
+}
+```
+
+example usage:
+
+``` bash
+$ api github get repos/danielfgray/api-helper/issues
+$ jq -r '.[] | "\(.title)"' <<< "$res"
+```
