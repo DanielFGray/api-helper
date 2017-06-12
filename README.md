@@ -32,6 +32,8 @@ Verbosity most be specified as the first argument.
 
 ## Quick tutorial
 
+### GitHub
+
 At minimum your profile should contain a URL entry:
 
 ```
@@ -81,7 +83,7 @@ api github post user/repos --json '.name="awesome_new_repo"'
 
 `--json` is the only non-standard option currently provided, it's short-hand for `--data "$(jq -Mcn '…')"`
 
----
+### GitLab
 
 For [GitLab](https://docs.gitlab.com/ce/api/README.html), the process is similar. Create a file at `~/.config/api-helper/gitlab` and put a `url` in there:
 
@@ -99,7 +101,13 @@ You should create [personal access token](https://gitlab.com/profile/personal_ac
 
 You can of course specify multiple `header` entries, if you want to add `sudo` for example.
 
----
+You can now [create new projects on GitLab](https://docs.gitlab.com/ce/api/projects.html#create-project) with
+
+```
+api gitlab post projects -d 'name=awesome_new_repo'
+```
+
+### Other
 
 If the API you're using prefers HTTP auth you can specify a user in the config file: 
 
@@ -116,7 +124,9 @@ data  api_key=dfd71eb15d3d76069d85617de769872a
 data  format=json
 ```
 
-## shell integration
+All of these options are taken from `man curl`; if you can pass it as an argument to `curl` you can save it as an option in the config file. Config files should be a sub-set of `curl` profiles described in the man page (I plan on a rewrite possibly in Perl that will allow full compatibility with existing profiles).
+
+## Shell Integration
 
 A small shell function can be added to your `bashrc` that will allow you to access the response as the variable `$res` in your shell:
 
@@ -124,15 +134,25 @@ A small shell function can be added to your `bashrc` that will allow you to acce
 api() {
   local output
   res=$(command api "$@")
-  if output=$(jq -C '.' <<< "$res"); then
-    echo "$output"
+  echo "$res"
+}
+```
+
+Or if you'd like automatic pretty printing with `jq`:
+
+``` bash
+api() {
+  local json
+  res=$(command api "$@")
+  if json=$(jq -C '.' <<< "$res" 2> /dev/null); then
+    echo "$json"
   else
     echo "$res"
   fi
 }
 ```
 
-example usage:
+### Example Usage
 
 ``` bash
 $ api github get repos/danielfgray/api-helper/issues
