@@ -132,7 +132,6 @@ A small shell function can be added to your `bashrc` that will allow you to acce
 
 ``` bash
 api() {
-  local output
   res=$(command api "$@")
   echo "$res"
 }
@@ -155,6 +154,6 @@ api() {
 ### Example Usage
 
 ``` bash
-$ api github get repos/danielfgray/api-helper/issues
-$ jq -r '.[] | "\(.title)"' <<< "$res"
+$ api github get users/danielfgray/repos
+$ jq -r '.[] | select(.fork == false) | "\(.html_url) \(.description)"' <<< "$res"
 ```
