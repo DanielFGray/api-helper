@@ -104,7 +104,11 @@ fi
 
 args+=( --request "${2^^}" )
 
-printf -v endpoint '%s/%s' "${url/%\/}" "${3#\/}"
+if [[ $3 = http* ]]; then
+  endpoint=$3
+else
+  printf -v endpoint '%s/%s' "${url/%\/}" "${3#\/}"
+fi
 
 shift 3
 
